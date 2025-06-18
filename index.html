@@ -1,133 +1,110 @@
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>La voce di Cuneo</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            color: #333;
-            margin: 0;
-            padding: 0;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Giornale Online - Titolo dell'Articolo</title>
+  <style>
+    body {
+      font-family: 'Georgia', serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+      background: #f9f9f9;
+      color: #333;
+    }
 
-        header {
-            background-color: #f4f4f9;
-            color: white;
-            padding: 15px;
-            text-align: center;
-        }
+    header {
+      background: #2c3e50;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
 
-        .container {
-            width: 80%;
-            margin: 0 auto;
-            padding: 20px;
-        }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      padding: 20px;
+      background: white;
+    }
 
-        h1 {
-            font-size: 2.5em;
-        }
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
 
-        h2 {
-            color: #4CAF50;
-        }
+    .subtitle {
+      color: #555;
+      font-style: italic;
+      margin-bottom: 20px;
+    }
 
-        p {
-            font-size: 1.2em;
-            line-height: 1.6;
-        }
+    .main-image {
+      width: 100%;
+      height: auto;
+      margin-bottom: 20px;
+    }
 
-        .image-container {
-            text-align: center;
-            margin-top: 20px;
-        }
+    .content {
+      margin-bottom: 40px;
+    }
 
-        img {
-            max-width: 80%;
-            height: auto;
-            border-radius: 8px;
-        }
+    .gallery {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
 
-        .cta {
-            display: inline-block;
-            background-color: #ff6347;
-            padding: 12px 25px;
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-            border-radius: 5px;
-            margin-top: 30px;
-        }
+    .gallery-item {
+      flex: 1 1 45%;
+      background: #f1f1f1;
+      padding: 10px;
+      border: 1px solid #ddd;
+    }
 
-        .cta:hover {
-            background-color: #ff4500;
-        }
+    .gallery-item img {
+      width: 100%;
+      height: auto;
+    }
 
-        footer {
-            text-align: center;
-            background-color: #333;
-            color: white;
-            padding: 10px 0;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .popup {
-            background-color: #ffeb3b;
-            border: 2px solid #333;
-            padding: 20px;
-            text-align: center;
-            font-size: 1.2em;
-            margin-top: 20px;
-        }
-    </style>
+    .caption {
+      font-size: 0.9em;
+      color: #555;
+      margin-top: 5px;
+    }
+  </style>
 </head>
 <body>
 
 <header>
-    <h1>La voce di Cuneo</h1>
+  <h1>Giornale Online</h1>
 </header>
 
 <div class="container">
-    <h2>Le novità che stavi aspettando!</h2>
-    <p>Abbiamo lavorato duramente per offrirti una piattaforma che cambierà il mondo! Siamo felici di presentarti una serie di nuove funzionalità incredibili.</p>
+  <h1>Titolo dell'Articolo</h1>
+  <p class="subtitle">Sottotitolo o sommario dell'articolo - 18 Giugno 2025</p>
+  
+  <img src="https://via.placeholder.com/800x400" alt="Immagine principale" class="main-image">
 
-    <div class="image-container">
-        <img src="https://via.placeholder.com/800x400?text=Immagine+professionale" alt="Immagine professionale">
+  <div class="content">
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque vehicula justo ut nulla dapibus, ut cursus ex feugiat. Nullam scelerisque libero vel tincidunt commodo. Curabitur sit amet sapien sed urna tincidunt vestibulum.</p>
+
+    <p>Proin a diam vitae purus ultrices luctus. Fusce bibendum mi in urna bibendum, a fermentum lacus commodo. Vivamus luctus turpis a turpis blandit, ut tincidunt leo consequat.</p>
+
+    <p>Aliquam erat volutpat. Etiam vitae tortor ut justo fermentum laoreet. Integer ac nisl fringilla, commodo nulla ac, blandit lorem.</p>
+  </div>
+
+  <div class="gallery">
+    <div class="gallery-item">
+      <img src="https://via.placeholder.com/400x250" alt="Immagine 1">
+      <div class="caption">Didascalia immagine 1</div>
     </div>
-
-    <p>Fra poco ti spiegheremo come la nostra piattaforma è pronta a risolvere problemi che pensavi irrisolvibili, come il caos nelle routine quotidiane o la gestione del tuo cane ballerino.</p>
-
-    <a href="#" class="cta" onclick="showPopup()">Scopri di più</a>
-
-    <div class="hidden popup" id="popupMessage">
-        <p>Immagina che tutto questo fosse un grande scherzo. Benvenuto nel sito più divertente che tu abbia mai visto!</p>
-        <p><em>Ps: Ci scusiamo se ti abbiamo preso in giro. Ma almeno spero ti sia divertito!</em></p>
-        <button onclick="hidePopup()">Chiudi</button>
+    <div class="gallery-item">
+      <img src="https://via.placeholder.com/400x250" alt="Immagine 2">
+      <div class="caption">Didascalia immagine 2</div>
     </div>
+  </div>
 </div>
-
-<footer>
-    <p>© 2025 Progetto Innovativo | Tutti i diritti riservati.</p>
-</footer>
-
-<script>
-    function showPopup() {
-        document.getElementById('popupMessage').classList.remove('hidden');
-    }
-
-    function hidePopup() {
-        document.getElementById('popupMessage').classList.add('hidden');
-    }
-</script>
 
 </body>
 </html>
