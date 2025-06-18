@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Morozzo Today - ASL al Castello di Morozzo</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap');
+
     body {
       font-family: 'Georgia', serif;
       line-height: 1.6;
@@ -19,6 +21,16 @@
       color: white;
       padding: 20px;
       text-align: center;
+      font-family: 'Playfair+Display', serif; /* Font giornalistico */
+    }
+
+    .header-title {
+      font-size: 2.5em;
+      margin-bottom: 0;
+    }
+
+    .newspaper-icon {
+      margin: 0 10px;
     }
 
     .container {
@@ -77,7 +89,11 @@
 <body>
 
 <header>
-  <h1>Morozzo Today</h1>
+  <h1 class="header-title">
+    <span class="newspaper-icon">📰</span>
+    Morozzo Today
+    <span class="newspaper-icon">📰</span>
+  </h1>
 </header>
 
 <div class="container">
@@ -87,7 +103,7 @@
   <img src="https://via.placeholder.com/800x400" alt="Immagine principale" class="main-image">
 
   <div class="content">
-    <p>Morozzo (CN) – Il Castello di Morozzo, storica e rinomata location per eventi e cerimonie, è stato temporaneamente chiuso a seguito di un’ispezione condotta ieri dall'ASL locale, che ha evidenziato gravi problematiche igienico-sanitarie, strutturali e di gestione della conservazione alimentare. La chiusura, che durerà almeno una settimana, riguarda tutte le attività programmate, tra cui matrimoni, ricevimenti e altre cerimonie.</p>
+ <p>Morozzo (CN) – Il Castello di Morozzo, storica e rinomata location per eventi e cerimonie, è stato temporaneamente chiuso a seguito di un’ispezione condotta ieri dall'ASL locale, che ha evidenziato gravi problematiche igienico-sanitarie, strutturali e di gestione della conservazione alimentare. La chiusura, che durerà almeno una settimana, riguarda tutte le attività programmate, tra cui matrimoni, ricevimenti e altre cerimonie.</p>
     <p>      </p>
     <p>L’ispezione ha riscontrato una serie di carenze nelle strutture igieniche, con particolare riferimento ai servizi igienici, che non sono stati ritenuti adeguati per garantire la sicurezza e il benessere degli ospiti. I bagni sono risultati inadeguati per un uso intensivo durante eventi, con alcuni impianti non funzionanti correttamente e mancanza di manutenzione generale. Questi problemi hanno determinato la necessità di interventi urgenti per ripristinare gli standard igienici richiesti dalla normativa.</p>
     <p>      </p>
