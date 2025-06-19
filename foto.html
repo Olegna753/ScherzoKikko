@@ -2,88 +2,54 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Scatta e Salva Foto</title>
+    <title>Le Tue Foto</title>
     <style>
         body {
             font-family: sans-serif;
             text-align: center;
             padding: 20px;
         }
-        video, img {
-            width: 100%;
-            max-width: 300px;
-            margin-top: 10px;
-        }
-        .image-container {
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
             margin-top: 20px;
+        }
+        .grid img {
+            width: 100%;
+            height: auto;
+            border: 2px solid #ddd;
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
 
-<h2>Scatta una foto</h2>
-<video id="video" autoplay></video>
-<br>
-<button id="captureBtn">📸 Scatta Foto</button>
-
-<h2>Le tue foto salvate</h2>
-<div class="image-container" id="imageContainer"></div>
+<h2>📸 Le tue Foto</h2>
+<div class="grid" id="imageGrid"></div>
 
 <script>
-    let video = document.getElementById('video');
-    let imageContainer = document.getElementById('imageContainer');
+    const dbRequest = indexedDB.open("PhotoDB", 1);
 
-    // Attiva la fotocamera
-    navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
-        video.srcObject = stream;
-    });
+    dbRequest.onsuccess = function(event) {
+        const db = event.target.result;
+        const tx = db.transaction("photos", "readonly");
+        const store = tx.objectStore("photos");
+        const getAll = store.getAll();
 
-    // IndexedDB setup
-    const dbName = "PhotoDB";
-    let db;
-
-    const request = indexedDB.open(dbName, 1);
-    request.onupgradeneeded = event => {
-        db = event.target.result;
-        db.createObjectStore("photos", { autoIncrement: true });
-    };
-    request.onsuccess = event => {
-        db = event.target.result;
-        loadImages();
-    };
-
-    // Scatta foto e salva
-    document.getElementById('captureBtn').addEventListener('click', () => {
-        let canvas = document.createElement('canvas');
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        canvas.getContext('2d').drawImage(video, 0, 0);
-        let dataUrl = canvas.toDataURL('image/png');
-
-        let tx = db.transaction("photos", "readwrite");
-        let store = tx.objectStore("photos");
-        store.add(dataUrl);
-
-        tx.oncomplete = () => {
-            loadImages(); // ricarica immagini
-        };
-    });
-
-    // Carica immagini da IndexedDB
-    function loadImages() {
-        imageContainer.innerHTML = '';
-        let tx = db.transaction("photos", "readonly");
-        let store = tx.objectStore("photos");
-        let request = store.getAll();
-
-        request.onsuccess = () => {
-            request.result.forEach(dataUrl => {
-                let img = document.createElement('img');
-                img.src = dataUrl;
-                imageContainer.appendChild(img);
+        getAll.onsuccess = function() {
+            const grid = document.getElementById("imageGrid");
+            if (getAll.result.length === 0) {
+                grid.innerHTML = "<p>Nessuna foto trovata. Vai a <a href='records.html'>scattare una foto</a>.</p>";
+                return;
+            }
+            getAll.result.forEach(base64 => {
+                const img = document.createElement("img");
+                img.src = base64;
+                grid.appendChild(img);
             });
         };
-    }
+    };
 </script>
 
 </body>
