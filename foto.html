@@ -1,1 +1,60 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Records delle Foto</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+            text-align: center;
+        }
+        img {
+            margin-top: 20px;
+            max-width: 100%;
+            height: auto;
+        }
+        .noImage {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Foto Caricate</h2>
+
+    <div id="imagePreview"></div>
+    
+    <div class="noImage" id="noImageMessage" style="display:none;">
+        <p>Non ci sono foto caricate. Torna a <a href="ricordi.html">ricordi.html</a> per caricarne una.</p>
+    </div>
+</div>
+
+<script>
+    // Funzione per caricare la foto salvata nel localStorage
+    window.onload = function() {
+        const savedImage = localStorage.getItem('savedImage');
+        const imagePreview = document.getElementById('imagePreview');
+        const noImageMessage = document.getElementById('noImageMessage');
+        
+        if (savedImage) {
+            const imgElement = document.createElement('img');
+            imgElement.src = savedImage;
+            imagePreview.appendChild(imgElement); // Mostra l'immagine
+            noImageMessage.style.display = 'none'; // Nascondi il messaggio "Nessuna foto"
+        } else {
+            noImageMessage.style.display = 'block'; // Mostra il messaggio "Nessuna foto"
+        }
+    }
+</script>
+
+</body>
+</html>
 
