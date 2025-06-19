@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Le Tue Foto</title>
+    <title>Scatta e Visualizza Foto</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,6 +13,20 @@
 
         h2 {
             margin-top: 20px;
+        }
+
+        video {
+            width: 100%;
+            max-width: 300px;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
         }
 
         .grid {
@@ -34,43 +48,82 @@
             color: gray;
             margin-top: 40px;
         }
-
-        a {
-            display: inline-block;
-            margin-top: 20px;
-            text-decoration: none;
-            color: #007BFF;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
     </style>
 </head>
 <body>
 
-<h2>📸 Le tue Foto</h2>
+<h2>📸 Scatta una Foto</h2>
+<video id="video" autoplay playsinline></video><br>
+<button id="captureBtn">Scatta Foto</button>
+
+<h2>🖼️ Le tue Foto Salvate</h2>
 <div class="grid" id="imageGrid"></div>
-<p class="empty" id="noImagesMessage" style="display: none;">Nessuna foto trovata.<br>Vai su <a href="records.html">records.html</a> per scattare una foto.</p>
+<p class="empty" id="noImagesMessage" style="display: none;">Nessuna foto trovata.</p>
 
 <script>
+    // ▶️ Avvia la fotocamera
+    const video = document.getElementById("video");
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => {
+            video.srcObject = stream;
+        })
+        .catch(error => {
+            alert("Errore nell'accesso alla fotocamera: " + error.message);
+        });
+
+    // 📦 IndexedDB setup
     const dbRequest = indexedDB.open("PhotoDB", 1);
+    let db;
+
+    dbRequest.onupgradeneeded = function(event) {
+        db = event.target.result;
+        db.createObjectStore("photos", { autoIncrement: true });
+    };
 
     dbRequest.onsuccess = function(event) {
-        const db = event.target.result;
+        db = event.target.result;
+        loadImages(); // carica immagini esistenti
+    };
+
+    dbRequest.onerror = function() {
+        alert("Errore nell'apertura del database.");
+    };
+
+    // 💾 Salva un'immagine in IndexedDB
+    function saveImageToDB(base64) {
+        const tx = db.transaction("photos", "readwrite");
+        const store = tx.objectStore("photos");
+        store.add(base64);
+        tx.oncomplete = loadImages;
+    }
+
+    // 📸 Scatta la foto dal video
+    document.getElementById("captureBtn").addEventListener("click", () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        canvas.getContext("2d").drawImage(video, 0, 0);
+        const imageBase64 = canvas.toDataURL("image/png");
+        saveImageToDB(imageBase64);
+    });
+
+    // 🖼️ Mostra tutte le immagini
+    function loadImages() {
+        const grid = document.getElementById("imageGrid");
+        const noImages = document.getElementById("noImagesMessage");
+        grid.innerHTML = '';
+
         const tx = db.transaction("photos", "readonly");
         const store = tx.objectStore("photos");
         const getAll = store.getAll();
 
-        getAll.onsuccess = function() {
-            const grid = document.getElementById("imageGrid");
-            const noImages = document.getElementById("noImagesMessage");
-
+        getAll.onsuccess = () => {
             const photos = getAll.result;
-
             if (photos.length === 0) {
                 noImages.style.display = "block";
                 return;
+            } else {
+                noImages.style.display = "none";
             }
 
             photos.forEach(base64 => {
@@ -79,11 +132,7 @@
                 grid.appendChild(img);
             });
         };
-    };
-
-    dbRequest.onerror = function() {
-        alert("Errore nell'apertura del database.");
-    };
+    }
 </script>
 
 </body>
