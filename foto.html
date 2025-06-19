@@ -2,239 +2,130 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Scatta, Visualizza e Gestisci Foto</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualizza le Foto</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
             margin: 0;
-            padding: 20px;
+            flex-direction: column;
+            text-align: center;
         }
-
-        select, button {
-            margin-top: 10px;
-            padding: 8px;
-            font-size: 16px;
-        }
-
-        video {
-            width: 100%;
-            max-width: 300px;
-            margin-top: 10px;
-            border-radius: 5px;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 10px;
-            padding: 20px;
-        }
-
-        .grid img {
-            width: 100%;
+        img {
+            margin-top: 20px;
+            max-width: 100%;
             height: auto;
-            border: 2px solid #ddd;
-            border-radius: 5px;
+            cursor: pointer;
             transition: transform 0.2s;
         }
-
-        .grid img.selected {
-            border: 2px solid red;
-            transform: scale(1.05);
+        img:hover {
+            transform: scale(1.1);
         }
-
-        .controls {
+        .image-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
             margin-top: 20px;
         }
-
-        .empty {
+        .image-item {
+            position: relative;
+            display: inline-block;
+        }
+        .image-item .delete {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 0, 0, 0.7);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            padding: 5px;
+            cursor: pointer;
+            display: none;
+        }
+        .image-item:hover .delete {
+            display: block;
+        }
+        .noImage {
+            margin-top: 20px;
+            font-size: 16px;
             color: gray;
-            margin-top: 40px;
         }
     </style>
 </head>
 <body>
 
-<h2>📸 Scatta una Foto</h2>
+<div class="container">
+    <h2>Le Tue Foto</h2>
 
-<select id="cameraSelect"></select><br>
-<video id="video" autoplay playsinline></video><br>
-<button id="captureBtn">Scatta Foto</button>
+    <!-- Container per le immagini -->
+    <div class="image-container" id="imageContainer"></div>
 
-<div class="controls">
-    <button id="deleteBtn" style="display:none;">Elimina Selezionate 🗑️</button>
-    <button id="downloadBtn">Scarica Tutte ⬇️</button>
+    <div class="noImage" id="noImageMessage" style="display:none;">
+        <p>Non ci sono foto caricate. Torna a <a href="scatta.html">scatta una foto</a>.</p>
+    </div>
+
+    <br>
+    <a href="scatta.html">Torna a scattare una foto</a>
 </div>
 
-<h2>🖼️ Le tue Foto Salvate</h2>
-<div class="grid" id="imageGrid"></div>
-<p class="empty" id="noImagesMessage" style="display: none;">Nessuna foto trovata.</p>
-
 <script>
-    let db;
-    let currentStream = null;
-    let selectedIndexes = [];
+    // Funzione per caricare tutte le foto salvate nel localStorage
+    window.onload = function() {
+        const savedImages = JSON.parse(localStorage.getItem('savedImages')) || [];
+        const imageContainer = document.getElementById('imageContainer');
+        const noImageMessage = document.getElementById('noImageMessage');
 
-    const video = document.getElementById("video");
-    const select = document.getElementById("cameraSelect");
-    const imageGrid = document.getElementById("imageGrid");
-    const deleteBtn = document.getElementById("deleteBtn");
-    const downloadBtn = document.getElementById("downloadBtn");
+        if (savedImages.length > 0) {
+            savedImages.forEach((imageBase64, index) => {
+                const imageItem = document.createElement('div');
+                imageItem.classList.add('image-item');
 
-    const dbRequest = indexedDB.open("PhotoDB", 1);
+                const imgElement = document.createElement('img');
+                imgElement.src = imageBase64;
+                imgElement.alt = 'Foto scattata';
+                
+                // Bottone di eliminazione
+                const deleteButton = document.createElement('button');
+                deleteButton.classList.add('delete');
+                deleteButton.textContent = 'X';
+                deleteButton.onclick = () => deleteImage(index); // Funzione per eliminare la foto
 
-    dbRequest.onupgradeneeded = function(event) {
-        db = event.target.result;
-        db.createObjectStore("photos", { autoIncrement: true });
-    };
-
-    dbRequest.onsuccess = function(event) {
-        db = event.target.result;
-        loadImages();
-    };
-
-    function saveImageToDB(base64) {
-        const tx = db.transaction("photos", "readwrite");
-        tx.objectStore("photos").add(base64);
-        tx.oncomplete = loadImages;
-    }
-
-    document.getElementById("captureBtn").addEventListener("click", () => {
-        const canvas = document.createElement("canvas");
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        canvas.getContext("2d").drawImage(video, 0, 0);
-        const imageBase64 = canvas.toDataURL("image/png");
-        saveImageToDB(imageBase64);
-    });
-
-    function loadImages() {
-        const noImages = document.getElementById("noImagesMessage");
-        imageGrid.innerHTML = '';
-        selectedIndexes = [];
-        deleteBtn.style.display = "none";
-
-        const tx = db.transaction("photos", "readonly");
-        const store = tx.objectStore("photos");
-        const getAll = store.getAll();
-
-        getAll.onsuccess = () => {
-            const photos = getAll.result;
-            if (photos.length === 0) {
-                noImages.style.display = "block";
-                return;
-            }
-
-            noImages.style.display = "none";
-            photos.forEach((base64, index) => {
-                const img = document.createElement("img");
-                img.src = base64;
-                img.dataset.index = index;
-
-                img.addEventListener("mousedown", (e) => {
-                    let timer = setTimeout(() => {
-                        toggleSelect(index, img);
-                    }, 500);
-                    img.addEventListener("mouseup", () => clearTimeout(timer));
-                });
-
-                imageGrid.appendChild(img);
+                // Aggiungi l'immagine e il bottone alla griglia
+                imageItem.appendChild(imgElement);
+                imageItem.appendChild(deleteButton);
+                imageContainer.appendChild(imageItem);
             });
-        };
-    }
-
-    function toggleSelect(index, img) {
-        const i = selectedIndexes.indexOf(index);
-        if (i >= 0) {
-            selectedIndexes.splice(i, 1);
-            img.classList.remove("selected");
+            noImageMessage.style.display = 'none'; // Nasconde il messaggio "Nessuna foto"
         } else {
-            selectedIndexes.push(index);
-            img.classList.add("selected");
-        }
-
-        deleteBtn.style.display = selectedIndexes.length > 0 ? "inline-block" : "none";
-    }
-
-    deleteBtn.addEventListener("click", () => {
-        const tx = db.transaction("photos", "readwrite");
-        const store = tx.objectStore("photos");
-
-        store.getAllKeys().onsuccess = function(e) {
-            const keys = e.target.result;
-            selectedIndexes.forEach(index => {
-                store.delete(keys[index]);
-            });
-            tx.oncomplete = () => {
-                selectedIndexes = [];
-                loadImages();
-            };
-        };
-    });
-
-    downloadBtn.addEventListener("click", () => {
-        const tx = db.transaction("photos", "readonly");
-        const store = tx.objectStore("photos");
-        const getAll = store.getAll();
-
-        getAll.onsuccess = () => {
-            const photos = getAll.result;
-            if (photos.length === 0) return;
-
-            const zip = new JSZip();
-            photos.forEach((base64, i) => {
-                const base64Data = base64.split(',')[1];
-                zip.file(`foto_${i + 1}.png`, base64Data, { base64: true });
-            });
-
-            zip.generateAsync({ type: "blob" }).then(content => {
-                const a = document.createElement("a");
-                a.href = URL.createObjectURL(content);
-                a.download = "le_mie_foto.zip";
-                a.click();
-            });
-        };
-    });
-
-    async function startCamera(deviceId) {
-        if (currentStream) currentStream.getTracks().forEach(track => track.stop());
-
-        const constraints = {
-            video: deviceId ? { deviceId: { exact: deviceId } } : true
-        };
-
-        try {
-            currentStream = await navigator.mediaDevices.getUserMedia(constraints);
-            video.srcObject = currentStream;
-        } catch (err) {
-            alert("Errore fotocamera: " + err.message);
+            noImageMessage.style.display = 'block'; // Mostra il messaggio "Nessuna foto"
         }
     }
 
-    async function loadCameraOptions() {
-        const devices = await navigator.mediaDevices.enumerateDevices();
-        const videoDevices = devices.filter(device => device.kind === 'videoinput');
+    // Funzione per eliminare l'immagine
+    function deleteImage(index) {
+        const savedImages = JSON.parse(localStorage.getItem('savedImages')) || [];
+        savedImages.splice(index, 1); // Rimuove l'immagine selezionata dall'array
 
-        select.innerHTML = '';
-        videoDevices.forEach((device, index) => {
-            const option = document.createElement("option");
-            option.value = device.deviceId;
-            option.text = device.label || `Fotocamera ${index + 1}`;
-            select.appendChild(option);
-        });
+        // Rimuove l'immagine dal localStorage
+        localStorage.setItem('savedImages', JSON.stringify(savedImages));
 
-        if (videoDevices.length > 0) {
-            startCamera(videoDevices[0].deviceId);
-        }
+        // Ricarica la pagina per aggiornare la vista
+        location.reload();
     }
 
-    select.addEventListener("change", () => startCamera(select.value));
-    navigator.mediaDevices.getUserMedia({ video: true }).then(loadCameraOptions);
+    // Funzione per scaricare l'immagine
+    function downloadImage(imageBase64) {
+        const a = document.createElement('a');
+        a.href = imageBase64;
+        a.download = 'foto.jpg'; // Imposta il nome del file per il download
+        a.click(); // Simula il click per avviare il download
+    }
 </script>
-
-<!-- ⚠️ Libreria JSZip per download ZIP -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
 </body>
 </html>
