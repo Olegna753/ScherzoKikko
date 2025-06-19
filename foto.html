@@ -2,28 +2,17 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visualizza le Foto</title>
+    <title>Scatta e Salva Foto</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            flex-direction: column;
+            font-family: sans-serif;
             text-align: center;
+            padding: 20px;
         }
-        img {
-            margin-top: 20px;
-            max-width: 100%;
-            height: auto;
-        }
-        .noImage {
-            margin-top: 20px;
-            font-size: 16px;
-            color: gray;
+        video, img {
+            width: 100%;
+            max-width: 300px;
+            margin-top: 10px;
         }
         .image-container {
             margin-top: 20px;
@@ -32,37 +21,68 @@
 </head>
 <body>
 
-<div class="container">
-    <h2>Le Tue Foto</h2>
+<h2>Scatta una foto</h2>
+<video id="video" autoplay></video>
+<br>
+<button id="captureBtn">📸 Scatta Foto</button>
 
-    <!-- Container per le immagini -->
-    <div class="image-container" id="imageContainer"></div>
-
-    <div class="noImage" id="noImageMessage" style="display:none;">
-        <p>Non ci sono foto caricate. Torna a <a href="records.html">records.html</a> per scattarne una.</p>
-    </div>
-
-    <br>
-    <a href="records.html">Torna a scattare una foto</a>
-</div>
+<h2>Le tue foto salvate</h2>
+<div class="image-container" id="imageContainer"></div>
 
 <script>
-    // Funzione per caricare tutte le foto salvate nel localStorage
-    window.onload = function() {
-        const savedImages = JSON.parse(localStorage.getItem('savedImages')) || [];
-        const imageContainer = document.getElementById('imageContainer');
-        const noImageMessage = document.getElementById('noImageMessage');
+    let video = document.getElementById('video');
+    let imageContainer = document.getElementById('imageContainer');
 
-        if (savedImages.length > 0) {
-            savedImages.forEach(imageBase64 => {
-                const imgElement = document.createElement('img');
-                imgElement.src = imageBase64;
-                imageContainer.appendChild(imgElement); // Mostra ogni immagine
+    // Attiva la fotocamera
+    navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
+        video.srcObject = stream;
+    });
+
+    // IndexedDB setup
+    const dbName = "PhotoDB";
+    let db;
+
+    const request = indexedDB.open(dbName, 1);
+    request.onupgradeneeded = event => {
+        db = event.target.result;
+        db.createObjectStore("photos", { autoIncrement: true });
+    };
+    request.onsuccess = event => {
+        db = event.target.result;
+        loadImages();
+    };
+
+    // Scatta foto e salva
+    document.getElementById('captureBtn').addEventListener('click', () => {
+        let canvas = document.createElement('canvas');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        canvas.getContext('2d').drawImage(video, 0, 0);
+        let dataUrl = canvas.toDataURL('image/png');
+
+        let tx = db.transaction("photos", "readwrite");
+        let store = tx.objectStore("photos");
+        store.add(dataUrl);
+
+        tx.oncomplete = () => {
+            loadImages(); // ricarica immagini
+        };
+    });
+
+    // Carica immagini da IndexedDB
+    function loadImages() {
+        imageContainer.innerHTML = '';
+        let tx = db.transaction("photos", "readonly");
+        let store = tx.objectStore("photos");
+        let request = store.getAll();
+
+        request.onsuccess = () => {
+            request.result.forEach(dataUrl => {
+                let img = document.createElement('img');
+                img.src = dataUrl;
+                imageContainer.appendChild(img);
             });
-            noImageMessage.style.display = 'none'; // Nasconde il messaggio "Nessuna foto"
-        } else {
-            noImageMessage.style.display = 'block'; // Mostra il messaggio "Nessuna foto"
-        }
+        };
     }
 </script>
 
