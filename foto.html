@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visualizza la Foto</title>
+    <title>Visualizza le Foto</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -25,17 +25,21 @@
             font-size: 16px;
             color: gray;
         }
+        .image-container {
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>Foto Caricata</h2>
+    <h2>Le Tue Foto</h2>
 
-    <div id="imagePreview"></div>
+    <!-- Container per le immagini -->
+    <div class="image-container" id="imageContainer"></div>
 
     <div class="noImage" id="noImageMessage" style="display:none;">
-        <p>Non c'è nessuna foto caricata. Torna a <a href="records.html">records.html</a> per scattarne una.</p>
+        <p>Non ci sono foto caricate. Torna a <a href="records.html">records.html</a> per scattarne una.</p>
     </div>
 
     <br>
@@ -43,17 +47,19 @@
 </div>
 
 <script>
-    // Funzione per caricare la foto salvata nel localStorage
+    // Funzione per caricare tutte le foto salvate nel localStorage
     window.onload = function() {
-        const savedImage = localStorage.getItem('savedImage');
-        const imagePreview = document.getElementById('imagePreview');
+        const savedImages = JSON.parse(localStorage.getItem('savedImages')) || [];
+        const imageContainer = document.getElementById('imageContainer');
         const noImageMessage = document.getElementById('noImageMessage');
-        
-        if (savedImage) {
-            const imgElement = document.createElement('img');
-            imgElement.src = savedImage;
-            imagePreview.appendChild(imgElement); // Mostra l'immagine
-            noImageMessage.style.display = 'none'; // Nascondi il messaggio "Nessuna foto"
+
+        if (savedImages.length > 0) {
+            savedImages.forEach(imageBase64 => {
+                const imgElement = document.createElement('img');
+                imgElement.src = imageBase64;
+                imageContainer.appendChild(imgElement); // Mostra ogni immagine
+            });
+            noImageMessage.style.display = 'none'; // Nasconde il messaggio "Nessuna foto"
         } else {
             noImageMessage.style.display = 'block'; // Mostra il messaggio "Nessuna foto"
         }
