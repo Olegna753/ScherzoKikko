@@ -46,6 +46,7 @@
 </div>
 
 <script>
+    // Funzione per visualizzare e salvare l'immagine
     function previewAndUploadImage(event) {
         const file = event.target.files[0];
         
@@ -58,9 +59,23 @@
                 imgElement.src = e.target.result; // Il risultato del FileReader
                 imagePreview.innerHTML = ''; // Pulisce qualsiasi immagine precedente
                 imagePreview.appendChild(imgElement); // Aggiungi l'immagine alla pagina
+
+                // Salva l'immagine nel localStorage
+                localStorage.setItem('savedImage', e.target.result);
             }
 
             reader.readAsDataURL(file); // Leggi l'immagine come URL
+        }
+    }
+
+    // Funzione per recuperare l'immagine dal localStorage e mostrarla
+    window.onload = function() {
+        const savedImage = localStorage.getItem('savedImage');
+        if (savedImage) {
+            const imagePreview = document.getElementById('imagePreview');
+            const imgElement = document.createElement('img');
+            imgElement.src = savedImage; // Recupera l'immagine dal localStorage
+            imagePreview.appendChild(imgElement); // Mostra l'immagine
         }
     }
 </script>
