@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Records delle Foto</title>
+    <title>Visualizza la Foto</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -22,19 +22,24 @@
         }
         .noImage {
             margin-top: 20px;
+            font-size: 16px;
+            color: gray;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>Foto Caricate</h2>
+    <h2>Foto Caricata</h2>
 
     <div id="imagePreview"></div>
-    
+
     <div class="noImage" id="noImageMessage" style="display:none;">
-        <p>Non ci sono foto caricate. Torna a <a href="ricordi.html">ricordi.html</a> per caricarne una.</p>
+        <p>Non c'è nessuna foto caricata. Torna a <a href="records.html">records.html</a> per scattarne una.</p>
     </div>
+
+    <br>
+    <a href="records.html">Torna a scattare una foto</a>
 </div>
 
 <script>
@@ -57,4 +62,3 @@
 
 </body>
 </html>
-
