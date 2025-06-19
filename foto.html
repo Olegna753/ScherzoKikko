@@ -2,17 +2,19 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Scatta e Visualizza Foto</title>
+    <title>Scatta, Visualizza e Gestisci Foto</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            padding: 20px;
             margin: 0;
+            padding: 20px;
         }
 
-        h2 {
-            margin-top: 20px;
+        select, button {
+            margin-top: 10px;
+            padding: 8px;
+            font-size: 16px;
         }
 
         video {
@@ -20,13 +22,6 @@
             max-width: 300px;
             margin-top: 10px;
             border-radius: 5px;
-        }
-
-        button {
-            margin-top: 15px;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
         }
 
         .grid {
@@ -41,7 +36,16 @@
             height: auto;
             border: 2px solid #ddd;
             border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+
+        .grid img.selected {
+            border: 2px solid red;
+            transform: scale(1.05);
+        }
+
+        .controls {
+            margin-top: 20px;
         }
 
         .empty {
@@ -53,27 +57,32 @@
 <body>
 
 <h2>📸 Scatta una Foto</h2>
+
+<select id="cameraSelect"></select><br>
 <video id="video" autoplay playsinline></video><br>
 <button id="captureBtn">Scatta Foto</button>
+
+<div class="controls">
+    <button id="deleteBtn" style="display:none;">Elimina Selezionate 🗑️</button>
+    <button id="downloadBtn">Scarica Tutte ⬇️</button>
+</div>
 
 <h2>🖼️ Le tue Foto Salvate</h2>
 <div class="grid" id="imageGrid"></div>
 <p class="empty" id="noImagesMessage" style="display: none;">Nessuna foto trovata.</p>
 
 <script>
-    // ▶️ Avvia la fotocamera
-    const video = document.getElementById("video");
-    navigator.mediaDevices.getUserMedia({ video: true })
-        .then(stream => {
-            video.srcObject = stream;
-        })
-        .catch(error => {
-            alert("Errore nell'accesso alla fotocamera: " + error.message);
-        });
-
-    // 📦 IndexedDB setup
-    const dbRequest = indexedDB.open("PhotoDB", 1);
     let db;
+    let currentStream = null;
+    let selectedIndexes = [];
+
+    const video = document.getElementById("video");
+    const select = document.getElementById("cameraSelect");
+    const imageGrid = document.getElementById("imageGrid");
+    const deleteBtn = document.getElementById("deleteBtn");
+    const downloadBtn = document.getElementById("downloadBtn");
+
+    const dbRequest = indexedDB.open("PhotoDB", 1);
 
     dbRequest.onupgradeneeded = function(event) {
         db = event.target.result;
@@ -82,22 +91,15 @@
 
     dbRequest.onsuccess = function(event) {
         db = event.target.result;
-        loadImages(); // carica immagini esistenti
+        loadImages();
     };
 
-    dbRequest.onerror = function() {
-        alert("Errore nell'apertura del database.");
-    };
-
-    // 💾 Salva un'immagine in IndexedDB
     function saveImageToDB(base64) {
         const tx = db.transaction("photos", "readwrite");
-        const store = tx.objectStore("photos");
-        store.add(base64);
+        tx.objectStore("photos").add(base64);
         tx.oncomplete = loadImages;
     }
 
-    // 📸 Scatta la foto dal video
     document.getElementById("captureBtn").addEventListener("click", () => {
         const canvas = document.createElement("canvas");
         canvas.width = video.videoWidth;
@@ -107,11 +109,11 @@
         saveImageToDB(imageBase64);
     });
 
-    // 🖼️ Mostra tutte le immagini
     function loadImages() {
-        const grid = document.getElementById("imageGrid");
         const noImages = document.getElementById("noImagesMessage");
-        grid.innerHTML = '';
+        imageGrid.innerHTML = '';
+        selectedIndexes = [];
+        deleteBtn.style.display = "none";
 
         const tx = db.transaction("photos", "readonly");
         const store = tx.objectStore("photos");
@@ -122,18 +124,117 @@
             if (photos.length === 0) {
                 noImages.style.display = "block";
                 return;
-            } else {
-                noImages.style.display = "none";
             }
 
-            photos.forEach(base64 => {
+            noImages.style.display = "none";
+            photos.forEach((base64, index) => {
                 const img = document.createElement("img");
                 img.src = base64;
-                grid.appendChild(img);
+                img.dataset.index = index;
+
+                img.addEventListener("mousedown", (e) => {
+                    let timer = setTimeout(() => {
+                        toggleSelect(index, img);
+                    }, 500);
+                    img.addEventListener("mouseup", () => clearTimeout(timer));
+                });
+
+                imageGrid.appendChild(img);
             });
         };
     }
+
+    function toggleSelect(index, img) {
+        const i = selectedIndexes.indexOf(index);
+        if (i >= 0) {
+            selectedIndexes.splice(i, 1);
+            img.classList.remove("selected");
+        } else {
+            selectedIndexes.push(index);
+            img.classList.add("selected");
+        }
+
+        deleteBtn.style.display = selectedIndexes.length > 0 ? "inline-block" : "none";
+    }
+
+    deleteBtn.addEventListener("click", () => {
+        const tx = db.transaction("photos", "readwrite");
+        const store = tx.objectStore("photos");
+
+        store.getAllKeys().onsuccess = function(e) {
+            const keys = e.target.result;
+            selectedIndexes.forEach(index => {
+                store.delete(keys[index]);
+            });
+            tx.oncomplete = () => {
+                selectedIndexes = [];
+                loadImages();
+            };
+        };
+    });
+
+    downloadBtn.addEventListener("click", () => {
+        const tx = db.transaction("photos", "readonly");
+        const store = tx.objectStore("photos");
+        const getAll = store.getAll();
+
+        getAll.onsuccess = () => {
+            const photos = getAll.result;
+            if (photos.length === 0) return;
+
+            const zip = new JSZip();
+            photos.forEach((base64, i) => {
+                const base64Data = base64.split(',')[1];
+                zip.file(`foto_${i + 1}.png`, base64Data, { base64: true });
+            });
+
+            zip.generateAsync({ type: "blob" }).then(content => {
+                const a = document.createElement("a");
+                a.href = URL.createObjectURL(content);
+                a.download = "le_mie_foto.zip";
+                a.click();
+            });
+        };
+    });
+
+    async function startCamera(deviceId) {
+        if (currentStream) currentStream.getTracks().forEach(track => track.stop());
+
+        const constraints = {
+            video: deviceId ? { deviceId: { exact: deviceId } } : true
+        };
+
+        try {
+            currentStream = await navigator.mediaDevices.getUserMedia(constraints);
+            video.srcObject = currentStream;
+        } catch (err) {
+            alert("Errore fotocamera: " + err.message);
+        }
+    }
+
+    async function loadCameraOptions() {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const videoDevices = devices.filter(device => device.kind === 'videoinput');
+
+        select.innerHTML = '';
+        videoDevices.forEach((device, index) => {
+            const option = document.createElement("option");
+            option.value = device.deviceId;
+            option.text = device.label || `Fotocamera ${index + 1}`;
+            select.appendChild(option);
+        });
+
+        if (videoDevices.length > 0) {
+            startCamera(videoDevices[0].deviceId);
+        }
+    }
+
+    select.addEventListener("change", () => startCamera(select.value));
+    navigator.mediaDevices.getUserMedia({ video: true }).then(loadCameraOptions);
 </script>
+
+<!-- ⚠️ Libreria JSZip per download ZIP -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
 </body>
 </html>
