@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carica una Foto</title>
+    <title>Scatta una Foto</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -30,14 +30,16 @@
 <body>
 
 <div class="container">
-    <h2>Carica una Foto</h2>
+    <h2>Scatta una Foto</h2>
     <button onclick="document.getElementById('fileInput').click()">Apri Fotocamera</button>
     
     <!-- Nascosto, ma attivato dal bottone -->
     <input type="file" id="fileInput" accept="image/*" capture="camera" onchange="previewAndSaveImage(event)">
     
-    <!-- Anteprima dell'immagine -->
     <div id="imagePreview"></div>
+
+    <br>
+    <a href="foto.html">Vai alla pagina per visualizzare la foto</a>
 </div>
 
 <script>
