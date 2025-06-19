@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carica Foto</title>
+    <title>Carica una Foto</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -25,11 +25,6 @@
             max-width: 100%;
             height: auto;
         }
-        .uploadedImage {
-            margin-top: 20px;
-            padding: 10px;
-            border: 1px solid #ddd;
-        }
     </style>
 </head>
 <body>
@@ -39,15 +34,15 @@
     <button onclick="document.getElementById('fileInput').click()">Apri Fotocamera</button>
     
     <!-- Nascosto, ma attivato dal bottone -->
-    <input type="file" id="fileInput" accept="image/*" capture="camera" onchange="previewAndUploadImage(event)">
+    <input type="file" id="fileInput" accept="image/*" capture="camera" onchange="previewAndSaveImage(event)">
     
     <!-- Anteprima dell'immagine -->
     <div id="imagePreview"></div>
 </div>
 
 <script>
-    // Funzione per visualizzare e salvare l'immagine
-    function previewAndUploadImage(event) {
+    // Funzione per scattare una foto e salvarla nel localStorage
+    function previewAndSaveImage(event) {
         const file = event.target.files[0];
         
         if (file) {
@@ -65,17 +60,6 @@
             }
 
             reader.readAsDataURL(file); // Leggi l'immagine come URL
-        }
-    }
-
-    // Funzione per recuperare l'immagine dal localStorage e mostrarla
-    window.onload = function() {
-        const savedImage = localStorage.getItem('savedImage');
-        if (savedImage) {
-            const imagePreview = document.getElementById('imagePreview');
-            const imgElement = document.createElement('img');
-            imgElement.src = savedImage; // Recupera l'immagine dal localStorage
-            imagePreview.appendChild(imgElement); // Mostra l'immagine
         }
     }
 </script>
