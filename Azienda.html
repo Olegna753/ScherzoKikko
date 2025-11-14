@@ -188,19 +188,70 @@
     </ul>
   </nav>
 
-  <div class="container">
-    <div class="sidebar">
-      <h2>Ultime News Italiane</h2>
-      <iframe
-        class="news-wall"
-        src="https://rss.app/embed/v1/wall?source=https%3A%2F%2Frss.app%2Fit%2Ffeed%2Fxxxxxxxxxxxx"
-        frameborder="0"
-        scrolling="yes">
-      </iframe>
-    </div>
-
-    
+<div class="container">
+  <div class="sidebar">
+    <h2>Ultime News Italiane</h2>
+    <iframe
+      class="news-wall"
+      src="https://rss.app/embed/v1/wall?source=https%3A%2F%2Frss.app%2Fit%2Ffeed%2Fxxxxxxxxxxxx"
+      frameborder="0"
+      scrolling="yes">
+    </iframe>
   </div>
+
+  <div class="content">
+    <h2>Seleziona le opzioni:</h2>
+    <div class="button-grid">
+      <button class="toggle-button">Opzione 1</button>
+      <button class="toggle-button">Opzione 2</button>
+      <button class="toggle-button">Opzione 3</button>
+      <button class="toggle-button">Opzione 4</button>
+      <button class="toggle-button">Opzione 5</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Griglia dei bottoni */
+  .button-grid {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    gap: 15px;
+    justify-content: start;
+  }
+
+  .toggle-button {
+    padding: 10px 20px;
+    border: 2px solid #9C9C9C;
+    border-radius: 12px;
+    background-color: #f0f0f0;
+    cursor: pointer;
+    font-size: 1em;
+    transition: all 0.3s;
+    min-width: 80px;
+  }
+
+  .toggle-button.selected {
+    background-color: #FACF0A;
+    color: black;
+    border-color: #FACF0A;
+  }
+
+  .toggle-button:hover {
+    transform: scale(1.05);
+  }
+</style>
+
+<script>
+  // Toggle button
+  const buttons = document.querySelectorAll('.toggle-button');
+  buttons.forEach(button => {
+    button.addEventListener('click', () => {
+      button.classList.toggle('selected');
+    });
+  });
+</script>
+
 </body>
 </html>
 
