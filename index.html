@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF‑8">
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pagina con Header, Menu e News Italiane</title>
   <style>
@@ -59,6 +59,7 @@
       list-style: none;
       display: flex;
       justify-content: center;
+      flex-wrap: wrap;
     }
 
     nav ul li {
@@ -79,11 +80,12 @@
       border-bottom: 2px solid #FACF0A;
     }
 
-    /* Layout principale: sidebar news + contenuto */
+    /* Layout principale */
     .container {
       display: flex;
       width: 100%;
       box-sizing: border-box;
+      flex-wrap: wrap; /* permette alle colonne di adattarsi */
     }
 
     .sidebar {
@@ -92,7 +94,7 @@
       padding: 20px;
       box-sizing: border-box;
       border-right: 2px solid #ddd;
-      min-height: calc(100vh - 200px); /* circa altezza restante sotto header/menu */
+      min-height: calc(100vh - 200px);
     }
 
     .content {
@@ -108,8 +110,62 @@
 
     .news-wall {
       width: 100%;
-      /* l'altezza può essere regolata a piacere */
       min-height: 500px;
+      border: none;
+    }
+
+    /* Bottoni */
+    a.button {
+      padding: 15px 30px;
+      margin: 10px;
+      border-radius: 8px;
+      font-size: 1.2em;
+      font-weight: bold;
+      text-decoration: none;
+      display: inline-block;
+      transition: background-color 0.3s, transform 0.3s;
+      text-align: center;
+    }
+
+    /* Media query per mobile */
+    @media screen and (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+
+      .sidebar, .content {
+        width: 100%;
+        border-right: none;
+      }
+
+      header .logo {
+        height: 100px;
+        position: relative;
+        display: block;
+        margin: 0 auto 10px auto;
+      }
+
+      .main-title {
+        font-size: 3em;
+      }
+
+      .sub-title {
+        font-size: 1.5em;
+      }
+
+      a.button {
+        width: 80%;
+        font-size: 1.1em;
+      }
+
+      nav ul {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      nav ul li {
+        margin: 10px 0;
+      }
     }
   </style>
 </head>
@@ -132,8 +188,6 @@
   <div class="container">
     <div class="sidebar">
       <h2>Ultime News Italiane</h2>
-
-      <!-- Widget News Wall di RSS.app -->
       <iframe
         class="news-wall"
         src="https://rss.app/embed/v1/wall?source=https%3A%2F%2Frss.app%2Fit%2Ffeed%2Fxxxxxxxxxxxx"
@@ -142,93 +196,59 @@
       </iframe>
     </div>
 
-<div class="content">
-  <h1>Consulenza del Lavoro su Misura: per Aziende e Privati</h1>
-  <h3>Trasparenza, competenza e soluzioni concrete per gestire il lavoro senza stress.</h3>
+    <div class="content">
+      <h1>Consulenza del Lavoro su Misura: per Aziende e Privati</h1>
+      <h3>Trasparenza, competenza e soluzioni concrete per gestire il lavoro senza stress.</h3>
 
-  <p>Che tu sia un’azienda in crescita o un privato alla ricerca di supporto nella gestione della tua carriera e delle pratiche burocratiche, sei nel posto giusto. Offriamo un approccio personalizzato che mette al centro le tue esigenze e semplifica la vita professionale.</p>
+      <p>Che tu sia un’azienda in crescita o un privato alla ricerca di supporto nella gestione della tua carriera e delle pratiche burocratiche, sei nel posto giusto. Offriamo un approccio personalizzato che mette al centro le tue esigenze e semplifica la vita professionale.</p>
 
-  <h2>Per le Aziende</h2>
-  <p>Supportiamo la tua impresa con servizi su misura:</p>
-  <ul>
-    <li>Gestione del personale e contratti personalizzati</li>
-    <li>Consulenza normativa completa</li>
-    <li>Strategie HR per ottimizzare tempo e risorse</li>
-    <li>Pratiche amministrative rapide e sicure</li>
-  </ul>
+      <h2>Per le Aziende</h2>
+      <p>Supportiamo la tua impresa con servizi su misura:</p>
+      <ul>
+        <li>Gestione del personale e contratti personalizzati</li>
+        <li>Consulenza normativa completa</li>
+        <li>Strategie HR per ottimizzare tempo e risorse</li>
+        <li>Pratiche amministrative rapide e sicure</li>
+      </ul>
 
-  <h2>Per i Privati</h2>
-  <p>Ti guidiamo passo passo in ogni adempimento:</p>
-  <ul>
-    <li>Busta paga e previdenza</li>
-    <li>Pratiche fiscali e dichiarazioni</li>
-    <li>Diritti sul lavoro e tutele legali</li>
-    <li>Consulenza personalizzata per la tua carriera</li>
-  </ul>
+      <h2>Per i Privati</h2>
+      <p>Ti guidiamo passo passo in ogni adempimento:</p>
+      <ul>
+        <li>Busta paga e previdenza</li>
+        <li>Pratiche fiscali e dichiarazioni</li>
+        <li>Diritti sul lavoro e tutele legali</li>
+        <li>Consulenza personalizzata per la tua carriera</li>
+      </ul>
 
-  <h3>Perché scegliere noi?</h3>
-  <p>Non importa se sei un’azienda ambiziosa o un privato attento ai dettagli: la nostra consulenza ti fa risparmiare tempo, evitare errori e vivere il lavoro con tranquillità. Soluzioni concrete, trasparenti e sempre a misura delle tue esigenze.</p>
+      <h3>Perché scegliere noi?</h3>
+      <p>Non importa se sei un’azienda ambiziosa o un privato attento ai dettagli: la nostra consulenza ti fa risparmiare tempo, evitare errori e vivere il lavoro con tranquillità. Soluzioni concrete, trasparenti e sempre a misura delle tue esigenze.</p>
 
-  <!-- Call to Action principale -->
-  <p style="text-align:center; margin-top:30px;">
-    <a href="#" style="
-        background-color: #FACF0A;
-        color: black;
-        padding: 18px 35px;
-        text-decoration: none;
-        font-weight: bold;
-        border-radius: 8px;
-        font-size: 1.3em;
-        transition: background-color 0.3s, transform 0.3s;
-      " 
-      onmouseover="this.style.backgroundColor='#e6bf08'; this.style.transform='scale(1.05)';" 
-      onmouseout="this.style.backgroundColor='#FACF0A'; this.style.transform='scale(1)';">
-      Parla con un consulente – la tua soluzione è a un click
-    </a>
-  </p>
+      <!-- Call to Action principale -->
+      <p style="text-align:center; margin-top:30px;">
+        <a href="#" class="button" style="background-color:#FACF0A; color:black;"
+          onmouseover="this.style.backgroundColor='#e6bf08'; this.style.transform='scale(1.05)';"
+          onmouseout="this.style.backgroundColor='#FACF0A'; this.style.transform='scale(1)';">
+          Parla con un consulente – la tua soluzione è a un click
+        </a>
+      </p>
 
-  <!-- Nuova sezione "Tu chi sei?" -->
-  <div style="text-align:center; margin-top:50px;">
-    <h2>Tu chi sei?</h2>
-    <div style="margin-top:20px;">
-      <a href="#aziende" style="
-          background-color: #007BFF;
-          color: white;
-          padding: 15px 30px;
-          margin: 10px;
-          text-decoration: none;
-          font-weight: bold;
-          border-radius: 8px;
-          font-size: 1.2em;
-          display: inline-block;
-          transition: background-color 0.3s, transform 0.3s;
-        "
-        onmouseover="this.style.backgroundColor='#0056b3'; this.style.transform='scale(1.05)';"
-        onmouseout="this.style.backgroundColor='#007BFF'; this.style.transform='scale(1)';">
-        Dedicato alle Aziende
-      </a>
-
-      <a href="#privati" style="
-          background-color: #28A745;
-          color: white;
-          padding: 15px 30px;
-          margin: 10px;
-          text-decoration: none;
-          font-weight: bold;
-          border-radius: 8px;
-          font-size: 1.2em;
-          display: inline-block;
-          transition: background-color 0.3s, transform 0.3s;
-        "
-        onmouseover="this.style.backgroundColor='#1e7e34'; this.style.transform='scale(1.05)';"
-        onmouseout="this.style.backgroundColor='#28A745'; this.style.transform='scale(1)';">
-        Dedicato ai Privati
-      </a>
+      <!-- Sezione "Tu chi sei?" -->
+      <div style="text-align:center; margin-top:50px;">
+        <h2>Tu chi sei?</h2>
+        <div style="margin-top:20px;">
+          <a href="#aziende" class="button" style="background-color:#007BFF; color:white;"
+            onmouseover="this.style.backgroundColor='#0056b3'; this.style.transform='scale(1.05)';"
+            onmouseout="this.style.backgroundColor='#007BFF'; this.style.transform='scale(1)';">
+            Dedicato alle Aziende
+          </a>
+          <a href="#privati" class="button" style="background-color:#28A745; color:white;"
+            onmouseover="this.style.backgroundColor='#1e7e34'; this.style.transform='scale(1.05)';"
+            onmouseout="this.style.backgroundColor='#28A745'; this.style.transform='scale(1)';">
+            Dedicato ai Privati
+          </a>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
   </div>
 </body>
 </html>
-
-
