@@ -16,38 +16,38 @@
       color: black;               
       text-align: center;         
       width: 100%;                
-      height: 220px;              
-      line-height: 220px;         /* centra verticalmente il testo */
-      font-size: 5em;             
-      font-style: italic;         /* correzione da 'italics' a 'italic' */
-      font-family: 'Poppins', sans-serif;
-      letter-spacing: 2px;        
-      text-transform: uppercase;  
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.3); 
+      padding: 20px 0;           /* padding verticale */
       border: 4px solid black;    
       box-sizing: border-box;     
     }
 
-    /* Seconda scritta sotto l'header */
-    .sub-header {
-      text-align: center;
+    /* Titolo principale */
+    .main-title {
+      font-size: 5em;
+      font-style: italic;         
+      font-family: 'Poppins', sans-serif;
+      letter-spacing: 2px;        
+      text-transform: uppercase;  
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3); 
+      margin: 0;                  /* elimina margini predefiniti */
+    }
+
+    /* Sottotitolo dentro l'header */
+    .sub-title {
       font-size: 2em;
       font-family: 'Arial', sans-serif;
-      color: #333;               /* colore testo personalizzabile */
-      margin-top: 20px;          /* distanza dall'header */
+      color: #333;               
       letter-spacing: 1px;
-      font-weight: normal;       /* normale o bold */
-      text-transform: none;      /* puoi cambiare in uppercase se vuoi */
+      font-weight: normal;       
+      text-transform: none;      
+      margin: 10px 0 0 0;        /* distanza dal titolo principale */
     }
   </style>
 </head>
 <body>
   <header>
-    Studio Garzone
+    <div class="main-title">Studio Garzone</div>
+    <div class="sub-title">Consulenza del Lavoro</div>
   </header>
-
-  <div class="sub-header">
-    Consulenza del Lavoro
-  </div>
 </body>
 </html>
