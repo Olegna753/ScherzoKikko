@@ -156,6 +156,18 @@
         font-size: 1.5em;
       }
 
+      .custom-list {
+        font-family: 'Georgia', serif; /* Cambia font a piacere */
+        font-size: 1.2em;             /* Cambia dimensione testo */
+        line-height: 1.8;             /* Spaziatura tra le righe */
+        padding-left: 0;              /* Rimuove padding predefinito */
+        list-style: none;             /* Rimuove i puntini standard */
+      }
+      
+      .custom-list li {
+        margin: 10px 0;               /* Spazio tra le voci */
+      }
+      
       a.button {
         width: 80%;
         font-size: 1.1em;
@@ -188,77 +200,69 @@
     </ul>
   </nav>
 
-  <div class="container">
-    <div class="sidebar">
-      <h2>Ultime News Italiane</h2>
-      <iframe
-        class="news-wall"
-        src="https://rss.app/embed/v1/wall?source=https%3A%2F%2Frss.app%2Fit%2Ffeed%2Fxxxxxxxxxxxx"
-        frameborder="0"
-        scrolling="yes">
-      </iframe>
+  <div class="content">
+  <h1>Consulenza del Lavoro su Misura: per Aziende e Privati</h1>
+  <h3>Trasparenza, competenza e soluzioni concrete per gestire il lavoro senza stress.</h3>
+
+  <p>Che tu sia un’azienda in crescita o un privato alla ricerca di supporto nella gestione della tua carriera e delle pratiche burocratiche, sei nel posto giusto. Offriamo un approccio personalizzato che mette al centro le tue esigenze e semplifica la vita professionale.</p>
+
+  <h2>Per le Aziende</h2>
+  <p>Supportiamo la tua impresa con servizi su misura:</p>
+  <ul class="custom-list">
+    <li>✅ Consulenza del lavoro e gestione del personale</li>
+    <li>💼 Elaborazione buste paga</li>
+    <li>⚖️ Conciliazioni sindacali e controversie del lavoro</li>
+    <li>📄 Certificazione contratti di lavoro</li>
+    <li>🎓 Attivazione tirocini</li>
+    <li>🌟 Welfare</li>
+    <li>🦺 Sicurezza e igiene sul lavoro</li>
+    <li>🔒 Privacy</li>
+    <li>🏠 Lavoro domestico</li>
+  </ul>
+
+  <h2>Per i Privati</h2>
+  <p>Ti guidiamo passo passo in ogni adempimento:</p>
+  <ul class="custom-list">
+    <li>Busta paga e previdenza</li>
+    <li>Pratiche fiscali e dichiarazioni</li>
+    <li>Diritti sul lavoro e tutele legali</li>
+    <li>Consulenza personalizzata per la tua carriera</li>
+  </ul>
+
+  <h3>Perché scegliere noi?</h3>
+  <p>Non importa se sei un’azienda ambiziosa o un privato attento ai dettagli: la nostra consulenza ti fa risparmiare tempo, evitare errori e vivere il lavoro con tranquillità. Soluzioni concrete, trasparenti e sempre a misura delle tue esigenze.</p>
+
+  <!-- Call to Action principale -->
+  <p style="text-align:center; margin-top:30px;">
+    <a href="#" class="button" style="background-color:#FACF0A; color:black;"
+      onmouseover="this.style.backgroundColor='#e6bf08'; this.style.transform='scale(1.05)';"
+      onmouseout="this.style.backgroundColor='#FACF0A'; this.style.transform='scale(1)';">
+      Parla con un consulente – la tua soluzione è a un click
+    </a>
+  </p>
+
+  <!-- Sezione "Tu chi sei?" -->
+  <div style="text-align:center; margin-top:50px;">
+    <h2>Tu chi sei?</h2>
+    <div style="margin-top:20px;">
+      <a href="Azienda.html" class="button" style="background-color:#007BFF; color:white;"
+        onmouseover="this.style.backgroundColor='#0056b3'; this.style.transform='scale(1.05)';"
+        onmouseout="this.style.backgroundColor='#007BFF'; this.style.transform='scale(1)';">
+        Dedicato alle Aziende
+      </a>
+      <a href="Privato.html" class="button" style="background-color:#28A745; color:white;"
+        onmouseover="this.style.backgroundColor='#1e7e34'; this.style.transform='scale(1.05)';"
+        onmouseout="this.style.backgroundColor='#28A745'; this.style.transform='scale(1)';">
+        Dedicato ai Privati
+      </a>
     </div>
-
-    <div class="content">
-      <h1>Consulenza del Lavoro su Misura: per Aziende e Privati</h1>
-      <h3>Trasparenza, competenza e soluzioni concrete per gestire il lavoro senza stress.</h3>
-
-      <p>Che tu sia un’azienda in crescita o un privato alla ricerca di supporto nella gestione della tua carriera e delle pratiche burocratiche, sei nel posto giusto. Offriamo un approccio personalizzato che mette al centro le tue esigenze e semplifica la vita professionale.</p>
-
-      <h2>Per le Aziende</h2>
-      <p>Supportiamo la tua impresa con servizi su misura:</p>
-      <ul>
-        <li>✅ Consulenza del lavoro e gestione del personale</li>
-        <li>💼 Elaborazione buste paga</li>
-        <li>⚖️ Conciliazioni sindacali e controversie del lavoro</li>
-        <li>📄 Certificazione contratti di lavoro</li>
-        <li>🎓 Attivazione tirocini</li>
-        <li>🌟 Welfare</li>
-        <li>🦺 Sicurezza e igiene sul lavoro</li>
-        <li>🔒 Privacy</li>
-        <li>🏠 Lavoro domestico</li>
-      </ul>
-      <h2>Per i Privati</h2>
-      <p>Ti guidiamo passo passo in ogni adempimento:</p>
-      <ul>
-        <li>Busta paga e previdenza</li>
-        <li>Pratiche fiscali e dichiarazioni</li>
-        <li>Diritti sul lavoro e tutele legali</li>
-        <li>Consulenza personalizzata per la tua carriera</li>
-      </ul>
-
-      <h3>Perché scegliere noi?</h3>
-      <p>Non importa se sei un’azienda ambiziosa o un privato attento ai dettagli: la nostra consulenza ti fa risparmiare tempo, evitare errori e vivere il lavoro con tranquillità. Soluzioni concrete, trasparenti e sempre a misura delle tue esigenze.</p>
-
-      <!-- Call to Action principale -->
-      <p style="text-align:center; margin-top:30px;">
-        <a href="#" class="button" style="background-color:#FACF0A; color:black;"
-          onmouseover="this.style.backgroundColor='#e6bf08'; this.style.transform='scale(1.05)';"
-          onmouseout="this.style.backgroundColor='#FACF0A'; this.style.transform='scale(1)';">
-          Parla con un consulente – la tua soluzione è a un click
-        </a>
-      </p>
-
-      <!-- Sezione "Tu chi sei?" -->
-     <div style="text-align:center; margin-top:50px;">
-  <h2>Tu chi sei?</h2>
-  <div style="margin-top:20px;">
-    <a href="Azienda.html" class="button" style="background-color:#007BFF; color:white;"
-      onmouseover="this.style.backgroundColor='#0056b3'; this.style.transform='scale(1.05)';"
-      onmouseout="this.style.backgroundColor='#007BFF'; this.style.transform='scale(1)';">
-      Dedicato alle Aziende
-    </a>
-    <a href="Privato.html" class="button" style="background-color:#28A745; color:white;"
-      onmouseover="this.style.backgroundColor='#1e7e34'; this.style.transform='scale(1.05)';"
-      onmouseout="this.style.backgroundColor='#28A745'; this.style.transform='scale(1)';">
-      Dedicato ai Privati
-    </a>
   </div>
 </div>
     </div>
   </div>
 </body>
 </html>
+
 
 
 
