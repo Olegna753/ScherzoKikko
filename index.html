@@ -10,21 +10,34 @@
       font-family: Arial, sans-serif;
     }
 
+    /* Header principale */
     header {
-      background-color: #FACF0A; /* giallo pastello */
-      color: black;               /* colore del testo */
-      text-align: center;         /* centra orizzontalmente */
+      background-color: #FACF0A; /* giallo */
+      color: black;               
+      text-align: center;         
       width: 100%;                
       height: 220px;              
-      line-height: 120px;         /* centra verticalmente il testo */
-      font-size: 2em;             /* dimensione del testo */
-      font-weight: italics;          /* grassetto */
-      font-family: 'Poppins', sans-serif; /* tipo di carattere */
-      letter-spacing: 2px;        /* spazio tra le lettere */
-      text-transform: uppercase;  /* maiuscolo tutto il testo */
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.3); /* ombra leggera */
-      border: 4px solid black;    /* bordo nero */
+      line-height: 220px;         /* centra verticalmente il testo */
+      font-size: 5em;             
+      font-style: italic;         /* correzione da 'italics' a 'italic' */
+      font-family: 'Poppins', sans-serif;
+      letter-spacing: 2px;        
+      text-transform: uppercase;  
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3); 
+      border: 4px solid black;    
       box-sizing: border-box;     
+    }
+
+    /* Seconda scritta sotto l'header */
+    .sub-header {
+      text-align: center;
+      font-size: 2em;
+      font-family: 'Arial', sans-serif;
+      color: #333;               /* colore testo personalizzabile */
+      margin-top: 20px;          /* distanza dall'header */
+      letter-spacing: 1px;
+      font-weight: normal;       /* normale o bold */
+      text-transform: none;      /* puoi cambiare in uppercase se vuoi */
     }
   </style>
 </head>
@@ -32,8 +45,9 @@
   <header>
     Studio Garzone
   </header>
+
+  <div class="sub-header">
+    Consulenza del Lavoro
+  </div>
 </body>
 </html>
-
-
-
