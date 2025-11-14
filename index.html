@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF‑8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pagina con Header, Menu e News</title>
+  <title>Pagina con Header, Menu e News Italiane</title>
   <style>
     body {
       margin: 0;
       font-family: Arial, sans-serif;
     }
 
-    /* Header principale */
+    /* Header */
     header {
       background-color: #FACF0A;
       color: black;
@@ -22,7 +22,6 @@
       position: relative;
     }
 
-    /* Logo in alto a sinistra */
     .logo {
       position: absolute;
       top: 10px;
@@ -31,7 +30,6 @@
       width: auto;
     }
 
-    /* Titolo principale */
     .main-title {
       font-size: 5em;
       font-style: italic;
@@ -42,18 +40,15 @@
       margin: 0;
     }
 
-    /* Sottotitolo dentro l'header */
     .sub-title {
       font-size: 2em;
       font-family: 'Arial', sans-serif;
       color: #333;
       letter-spacing: 1px;
-      font-weight: normal;
-      text-transform: none;
       margin: 10px 0 0 0;
     }
 
-    /* Barra di navigazione sotto l'header */
+    /* Menu di navigazione */
     nav {
       background-color: #fff;
     }
@@ -84,41 +79,37 @@
       border-bottom: 2px solid #FACF0A;
     }
 
-    /* Layout principale con sidebar e contenuto */
+    /* Layout principale: sidebar news + contenuto */
     .container {
       display: flex;
       width: 100%;
       box-sizing: border-box;
     }
 
-    /* Colonna sinistra per le news */
     .sidebar {
-      width: 25%;
-      background-color: #f4f4f4;
+      width: 30%;
+      background-color: #f9f9f9;
       padding: 20px;
+      box-sizing: border-box;
       border-right: 2px solid #ddd;
-      box-sizing: border-box;
-      min-height: 400px;
+      min-height: calc(100vh - 200px); /* circa altezza restante sotto header/menu */
     }
 
-    /* Colonna contenuto principale */
     .content {
-      width: 75%;
+      width: 70%;
       padding: 20px;
       box-sizing: border-box;
     }
 
-    /* Titolo news */
     .sidebar h2 {
       font-size: 1.5em;
       margin-top: 0;
     }
 
-    /* Feed RSS o widget news */
-    .news-feed {
+    .news-wall {
       width: 100%;
-      height: 400px;
-      border: none;
+      /* l'altezza può essere regolata a piacere */
+      min-height: 500px;
     }
   </style>
 </head>
@@ -126,7 +117,7 @@
   <header>
     <img class="logo" src="https://raw.githubusercontent.com/Olegna753/ScherzoKikko/main/ConsulentiLdeLavoroLogo.jpg" alt="Logo">
     <div class="main-title">Studio Garzone</div>
-    <div class="sub-title">-   Consulenza del Lavoro   -</div>
+    <div class="sub-title">- Consulenza del Lavoro -</div>
   </header>
 
   <nav>
@@ -140,19 +131,21 @@
 
   <div class="container">
     <div class="sidebar">
-      <h2>Ultime News</h2>
-      <iframe class="news-feed"
-              src="https://it.euronews.com/widgets?embed_type=timeline"
-              title="Feed Notizie Euronews"
-              style="width:100%; height:400px; border:none;">
+      <h2>Ultime News Italiane</h2>
+
+      <!-- Widget News Wall di RSS.app -->
+      <iframe
+        class="news-wall"
+        src="https://rss.app/embed/v1/wall?source=https%3A%2F%2Frss.app%2Fit%2Ffeed%2Fxxxxxxxxxxxx"
+        frameborder="0"
+        scrolling="yes">
       </iframe>
     </div>
 
     <div class="content">
       <h2>Benvenuti</h2>
-      <p>Qui puoi inserire il contenuto principale del sito dello Studio Garzone. Ad esempio informazioni sui servizi, consulenza, contatti e altro.</p>
+      <p>Qui puoi inserire il contenuto principale del sito dello Studio Garzone…</p>
     </div>
   </div>
 </body>
 </html>
-
